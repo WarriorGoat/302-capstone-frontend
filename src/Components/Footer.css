@@ -1,0 +1,9 @@
+
+footer {
+    color: rgb(166, 163, 163);
+    background-color: rgb(38, 38, 38);
+    font-family: helvetica, arial, sans;
+    text-align: center;
+    text-shadow: 2px 2px 2px rgba(99, 99, 241, 0.4);
+    padding: 10px;
+  }
