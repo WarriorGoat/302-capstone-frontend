@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Routes, useNavigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+import store from "./redux/store";
 import Layout from "./Layouts/Layout";
 import HomePage from "./Pages/HomePage";
 import EntryFormPage from "./Pages/EntryFormPage";
 import EntryListPage from "./Pages/EntryListPage";
 import LoginPage from "./Pages/LoginPage";
 import RegistrationPage from "./Pages/RegistrationPage";
+import ProtectedRoute from "./Components/ProtectedRoutes";
 import "./app.css";
-
-// const urlEndPoint = process.env.REACT_APP_BACKEND;
 
 function App() {
   const [userMessage, setUserMessage] = useState("");
+  const auth = store.auth;
+  // const navigate = useNavigate()
+
+  // const ProtectedRoute = ({ children }) => {
+  //   const SendToLogin = navigate('/login')
+  //   {!auth? (<SendToLogin />):( children)}
+  //   ;
+  // };
 
   const router = createBrowserRouter([
     {
@@ -24,27 +33,25 @@ function App() {
         },
         {
           path: "/entry-form",
-          element: <EntryFormPage 
-          // urlEndPoint={urlEndPoint} 
-          />,
+          element: 
+          // <ProtectedRoute>
+            <EntryFormPage /> 
+          // </ProtectedRoute>  
         },
         {
           // index: true,
           path: "/list",
           element: <EntryListPage 
-          // urlEndPoint={urlEndPoint} 
           />,
         },
         {
           path: "/login",
           element: <LoginPage 
-          // urlEndPoint={urlEndPoint}
           />,
         },
         {
           path: "/registration",
           element: <RegistrationPage 
-          // urlEndPoint={urlEndPoint}
           />,
         },
       ],
@@ -52,9 +59,7 @@ function App() {
   ]);
 
   return (
-    <div className="Header">
       <RouterProvider router={router} />
-    </div>
   );
 }
 

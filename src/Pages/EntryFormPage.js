@@ -1,691 +1,322 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch,  useSelector} from "react-redux";
 import "./EntryForm.css";
+import { registerEntry } from "../redux/entriesSlice";
 
 const EntryFormPage = (props) => {
-  const backendUrl = process.env.REACT_APP_BACKEND;
-  const [company, setCompany] = useState("");
-  const [author, setAuthor] = useState("")
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [webAddress, setWebAddress] = useState("")
-  const [streetNum, setStreetNum] = useState("");
-  const [streetName, setStreetName] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [licenseState, setLicenseState] = useState("")
-  const [licenseNum, setLicenseNum] = useState("");
-  const [licenseClass, setLicenseClass] = useState("");
-  const [workType0, setWorkType0] = useState("");
-  const [workType1, setWorkType1] = useState("");
-  const [workType2, setWorkType2] = useState("");
-  const [workType3, setWorkType3] = useState("");
-  const [workType4, setWorkType4] = useState("")
-  const [workType5, setWorkType5] = useState("");
-  const [workType6, setWorkType6] = useState("");
-  const [workType7, setWorkType7] = useState("");
-  const [workType8, setWorkType8] = useState("");
-  const [workType9, setWorkType9] = useState("");
-  const [freeEstimates, setFreeEstimates] = useState(["false"]);
 
-  //instantiate navigator
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const status = useSelector((state) => state.users.status); 
+  const scope = useSelector((state) => state.users.scope)
+  const [selected, setSelected]=useState(null)
+  const states=["AL", "AK", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "NE", "NH", "NJ", "NM", "NV", "NY", "ND", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VI", "VT", "VA", "WA", "WI", "WV", "WY"]
 
-  const handleCreateEntry = async () => {
-    axios
-      .post(`${backendUrl}/entries/create-one`, {
-        company: company,
-        author: author,
-        contactFirstName: firstName,
-        contactLastName: lastName,
-        contactEmail: email,
-        webAddress: webAddress,
-        streetNum: streetNum,
-        streetName: streetName,
-        city: city,
-        state: state,
-        zipCode: zipCode,
-        licenseState: licenseState,
-        licenseNum: licenseNum,
-        licenseClass: licenseClass,
-        type0: workType0,
-        type1: workType1,
-        type2: workType2,
-        type3: workType3,
-        type4: workType4,
-        type5: workType5,
-        type6: workType6,
-        type7: workType7,
-        type8: workType8,
-        type9: workType9, 
-        freeEstimates: freeEstimates
-        
-      })
-      .then(function () {
-        navigate("/list");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  const specialties = [" ", "General Contractor", "Electrical", "Plumbing", "Concrete", "Masonry", "Framing", "Heating & Cooling", "Windows & Doors", "Roofing", "Insulation", "Flooring", "Tile", "Painting", "Landscaping", "Decking", "Siding", "Gutters", "Asphalt Paving", "Excavation", "Basements", "Trim Carpentry", "Handy Man"]
+
+  useEffect(() => {
+      if (status === "fulfilled") {
+        console.log("Registration successful")
+        navigate("/login");
+      }
+  }, [status]);
+
+  const handleSubmit=(event)=>{
+    event.preventDefault();
+    console.log("Entry form activated");
+    const data = new FormData(event.currentTarget);
+    let entryObj = {
+      company: data.get("company"),
+      author: data.get("author"), 
+      contactFirstName: data.get("contactFirstName"),
+      contactLastName: data.get("contactLastName"),
+      contactEmail: data.get("contactEmail"),
+      webAddress: data.get("webAddress"),
+      streetNum: data.get("streetNum"),
+      streetName: data.get("streetName"),
+      city: data.get("city"),
+      state: data.get("state"),
+      zipCode: data.get("zipCode"),
+      licenseState: data.get("licenseState"),
+      licenseNum: data.get("licenseNum"),
+      licenseClass: data.get("licenseClass"),
+      type0: data.get("type0"),
+      type1: data.get("type1"),
+      type2: data.get("type2"),
+      type3: data.get("type3"),
+      type4: data.get("type4"),
+      type5: data.get("type5"),
+      type6: data.get("type6"),
+      type7: data.get("type7"),
+      type8: data.get("type8"),
+      type9: data.get("type9"),   
+      active: true,
+      freeEstimates: data.get("freeEstimates"),
+
+    };
+    dispatch(registerEntry(entryObj));
+    console.log("Entry form submitted")
+  }
+
 
   return (
-    <form>
+    (scope === "contractor") ? (
+
+      <form onSubmit={handleSubmit}>
       <div>
         <h1>Create a New Entry</h1>
         <label>Company: </label>
         <input
           type="text"
+          id="company"
+          name="company"
           placeholder="Enter Company Name"
           autoComplete="Off"
-          onChange={(e) => {
-            setCompany(e.target.value);
-          }}
         />
         <br />
         <label>Author: </label>
         <input
           type="text"
+          id="author"
+          name="author"
           placeholder="Author's Name"
           autoComplete="Off"
-          onChange={(e) => {
-            setAuthor(e.target.value);
-          }}
         />
         <br />
         <label>Contact First Name: </label>
         <input
           type="text"
+          id="contactFirstName"
+          name="contactFirstName"
           placeholder="First Name"
           autoComplete="Off"
-          onChange={(e) => {
-            setFirstName(e.target.value);
-          }}
         />
         <br />
         <label>Contact Last Name: </label>
         <input
           type="text"
+          id="contactLastName"
+          name="contactLastName"
           placeholder="Last Name"
           autoComplete="Off"
-          onChange={(e) => {
-            setLastName(e.target.value);
-          }}
         />
         <br />
         <label>Contact E-Mail: </label>
         <textarea
           type="text"
+          id="contactEmail"
+          name="contactEmail"
           placeholder="E-Mail"
           autoComplete="Off"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
         />
         <br />
       </div>
       <div>
-        <p>Company Address</p>
+        <h3>Company Address</h3>
         <label>Street Number: </label>
         <input
           type="text"
+          id="streetNum"
+          name="streetNum"
           placeholder="Number"
           autoComplete="Off"
-          onChange={(e) => {
-            setStreetNum(e.target.value);
-          }}
         />
         <label>Street Name: </label>
         <input
           type="text"
+          id="streetName"
+          name="streetName"
           placeholder="Street"
           autoComplete="Off"
-          onChange={(e) => {
-            setStreetName(e.target.value);
-          }}
         />
+        <br/>
         <label>City: </label>
         <input
           type="text"
+          id="city"
+          name="city"
           placeholder="City"
           autoComplete="Off"
-          onChange={(e) => {
-            setCity(e.target.value);
-          }}
         />
         <label>State: </label>
         <select
-          name="stateList"
-          id="stateList"
+          name="state"
+          id="state"
           required="required"
-          onChange={(e)=> {
-            setState(e.target.value)
-          }} 
+          onChange={(value) => setSelected(value)}
         >
-          <option value="AL">AL</option>
-          <option value="AK">AK</option>
-          <option value="AR">AR</option>
-          <option value="AZ">AZ</option>
-          <option value="CA">CA</option>
-          <option value="CO">CO</option>
-          <option value="CT">CT</option>
-          <option value="DC">DC</option>
-          <option value="DE">DE</option>
-          <option value="FL">FL</option>
-          <option value="GA">GA</option>
-          <option value="GU">GU</option>
-          <option value="HI">HI</option>
-          <option value="IA">IA</option>
-          <option value="ID">ID</option>
-          <option value="IL">IL</option>
-          <option value="IN">IN</option>
-          <option value="KS">KS</option>
-          <option value="KY">KY</option>
-          <option value="LA">LA</option>
-          <option value="MA">MA</option>
-          <option value="MD">MD</option>
-          <option value="ME">ME</option>
-          <option value="MI">MI</option>
-          <option value="MN">MN</option>
-          <option value="MO">MO</option>
-          <option value="MS">MS</option>
-          <option value="MT">MT</option>
-          <option value="NC">NC</option>
-          <option value="NE">NE</option>
-          <option value="NH">NH</option>
-          <option value="NJ">NJ</option>
-          <option value="NM">NM</option>
-          <option value="NV">NV</option>
-          <option value="NY">NY</option>
-          <option value="ND">ND</option>
-          <option value="OH">OH</option>
-          <option value="OK">OK</option>
-          <option value="OR">OR</option>
-          <option value="PA">PA</option>
-          <option value="PR">PR</option>
-          <option value="RI">RI</option>
-          <option value="SC">SC</option>
-          <option value="SD">SD</option>
-          <option value="TN">TN</option>
-          <option value="TX">TX</option>
-          <option value="UT">UT</option>
-          <option value="VI">VI</option>
-          <option value="VT">VT</option>
-          <option value="VA">VA</option>
-          <option value="WA">WA</option>
-          <option value="WI">WI</option>
-          <option value="WV">WV</option>
-          <option value="WY">WY</option>
+          {states.map(state => <option value={state}>{state}</option>)}
         </select>
         <label>Zip Code: </label>
         <input
           type="text"
+          id="zipCode"
+          name="zipCode"
           placeholder="zip"
           autoComplete="Off"
-          onChange={(e) => {
-            setZipCode(e.target.value);
-          }}
         />
         <br />
         <label>Company Website: </label>
         <textarea
           type="text"
+          id="webAddress"
+          name="webAddress"
           placeholder="https://..."
           autoComplete="Off"
-          onChange={(e) => {
-            setWebAddress(e.target.value);
-          }}
         />
         <br />
       </div>
       <div>
-        <p>License Info</p>
+        <h3>License Info</h3>
         <label>State: </label>
         <select
-          name="stateList"
-          id="stateList"
+          name="licenseState"
+          id="licenseState"
           required="required"
-          onChange={(e)=> {
-            setLicenseState(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value="AL">AL</option>
-          <option value="AK">AK</option>
-          <option value="AR">AR</option>
-          <option value="AZ">AZ</option>
-          <option value="CA">CA</option>
-          <option value="CO">CO</option>
-          <option value="CT">CT</option>
-          <option value="DC">DC</option>
-          <option value="DE">DE</option>
-          <option value="FL">FL</option>
-          <option value="GA">GA</option>
-          <option value="GU">GU</option>
-          <option value="HI">HI</option>
-          <option value="IA">IA</option>
-          <option value="ID">ID</option>
-          <option value="IL">IL</option>
-          <option value="IN">IN</option>
-          <option value="KS">KS</option>
-          <option value="KY">KY</option>
-          <option value="LA">LA</option>
-          <option value="MA">MA</option>
-          <option value="MD">MD</option>
-          <option value="ME">ME</option>
-          <option value="MI">MI</option>
-          <option value="MN">MN</option>
-          <option value="MO">MO</option>
-          <option value="MS">MS</option>
-          <option value="MT">MT</option>
-          <option value="NC">NC</option>
-          <option value="NE">NE</option>
-          <option value="NH">NH</option>
-          <option value="NJ">NJ</option>
-          <option value="NM">NM</option>
-          <option value="NV">NV</option>
-          <option value="NY">NY</option>
-          <option value="ND">ND</option>
-          <option value="OH">OH</option>
-          <option value="OK">OK</option>
-          <option value="OR">OR</option>
-          <option value="PA">PA</option>
-          <option value="PR">PR</option>
-          <option value="RI">RI</option>
-          <option value="SC">SC</option>
-          <option value="SD">SD</option>
-          <option value="TN">TN</option>
-          <option value="TX">TX</option>
-          <option value="UT">UT</option>
-          <option value="VI">VI</option>
-          <option value="VT">VT</option>
-          <option value="VA">VA</option>
-          <option value="WA">WA</option>
-          <option value="WI">WI</option>
-          <option value="WV">WV</option>
-          <option value="WY">WY</option>
+          {states.map(state => <option value={state}>{state}</option>)}
         </select>
         <label>License Number: </label>
         <input
           type="text"
+          id="licenseNum"
+          name="licenseNum"
           placeholder="Number"
           autoComplete="Off"
-          onChange={(e) => {
-            setLicenseNum(e.target.value);
-          }}
         />
         <label>License Class: </label>
         <input
           type="text"
+          id="licenseClass"
+          name="licenseClass"
           placeholder="A, B, C, etc..."
           autoComplete="Off"
-          onChange={(e) => {
-            setLicenseClass(e.target.value);
-          }}
         />
         <br />
       </div>
       <div>
-        <p>Provides Free Estimates</p>
+        <label>Provides Free Estimates</label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="freeEstimates"
+          id="freeEstimates"
           required="required"
-          onChange={(e)=> {
-            setFreeEstimates(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="true">True</option>
           <option value="false">False</option>
+          <option value="true">True</option>
           </select>
       </div>
       <div>
-        <p>Work Specialties - Fill as many as you would like</p>
+        <h3>Work Specialties - Fill as many as you would like</h3>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type0"
+          id="type0"
           required="required"
-          onChange={(e)=> {
-            setWorkType0(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+       {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type1"
+          id="type1"
           required="required"
-          onChange={(e)=> {
-            setWorkType1(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type2"
+          id="type2"
           required="required"
-          onChange={(e)=> {
-            setWorkType2(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type3"
+          id="type3"
           required="required"
-          onChange={(e)=> {
-            setWorkType3(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
+        </select>
+        <br/>
+        <label>Type: </label>
+        <select
+          name="type4"
+          id="type4"
+          required="required"
+          onChange={(value) => setSelected(value)}
+        >
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type5"
+          id="type5"
           required="required"
-          onChange={(e)=> {
-            setWorkType4(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+         {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type6"
+          id="type6"
           required="required"
-          onChange={(e)=> {
-            setWorkType5(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type7"
+          id="type7"
           required="required"
-          onChange={(e)=> {
-            setWorkType6(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
+        </select>
+        <br/>
+        <label>Type: </label>
+        <select
+          name="type8"
+          id="type8"
+          required="required"
+          onChange={(value) => setSelected(value)}
+        >
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <label>Type: </label>
         <select
-          name="specialtiesList"
-          id="specialtiesList"
+          name="type9"
+          id="type9"
           required="required"
-          onChange={(e)=> {
-            setWorkType7(e.target.value)
-          }}
+          onChange={(value) => setSelected(value)}
         >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
-        </select>
-        <label>Type: </label>
-        <select
-          name="specialtiesList"
-          id="specialtiesList"
-          required="required"
-          onChange={(e)=> {
-            setWorkType8(e.target.value)
-          }}
-        >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
-        </select>
-        <label>Type: </label>
-        <select
-          name="specialtiesList"
-          id="specialtiesList"
-          required="required"
-          onChange={(e)=> {
-            setWorkType9(e.target.value)
-          }}
-        >
-          <option value=" "></option>
-          <option value="General Contractor">General Contractor</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Concrete">Concrete</option>
-          <option value="Masonry">Masonry</option>
-          <option value="Framing">Framing</option>
-          <option value="Heating & Cooling">Heating & Cooling</option>
-          <option value="Windows & Doors">Windows & Doors</option>
-          <option value="Roofing">Roofing</option>
-          <option value="Insulation">Insulation</option>
-          <option value="Flooring">Flooring</option>
-          <option value="Tile">Tile</option>
-          <option value="Painting">Painting</option>
-          <option value="Landscaping">Landscaping</option>
-          <option value="Decking">Decking</option>
-          <option value="Siding">Siding</option>
-          <option value="Gutters">Gutters</option>
-          <option value="Asphalt Paving">Asphalt Paving</option>
-          <option value="Excavation">Excavation</option>
-          <option value="Basements">Basements</option>
-          <option value="Trim Carpentry">Trim Carpentry</option>
-          <option value="Handy Man">Handy Man</option>
+          {specialties.map(specialty => <option value={specialty}>{specialty}</option>)}
         </select>
         <br />
       </div>
-      <button
-        onClick={() => {
-          handleCreateEntry();
-        }}
-      >
+      <button type="submit">
         Create Entry:
-        {/* {" "} */}
       </button>
     </form>
-  );
-};
+
+    ):(
+      <div>
+        <h2>You must be logged in with a contractor account to create a new contractor entry.</h2>
+      </div>
+    )
+    
+  )
+}
 
 export default EntryFormPage;

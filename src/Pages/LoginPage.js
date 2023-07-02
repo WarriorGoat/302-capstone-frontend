@@ -1,48 +1,72 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, resetStatus } from "../redux/usersSlice";
+import { authCheck, logout } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Hooks/Auth";
 
-const LoginPage = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
-  const auth = useAuth(); //access the authentication context 
-	const navigate = useNavigate() // be able to navigate to home on login
+const LoginPage = () => {
+  const auth = useSelector((state) => state.auth.isAuth);
+  const status = useSelector((state) => state.users.status);
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // be able to navigate to home on login
+
+  useEffect(() => {
+    if (status === "fulfilled") {
+      dispatch(resetStatus());
+      navigate("/", { replace: true });
+    }
+  }, [status]);
+
+  useEffect(() => {
+    dispatch(authCheck());
+  }, [auth]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("LogIn form submitted");
+    const data = new FormData(event.currentTarget);
+    let userObj = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    console.log(userObj)
+    dispatch(login(userObj));
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <div>
-      <h1>Login Page</h1>
-      <h3>{loginMessage}</h3>
-      <label>email</label>
-      <input
-        type="text"
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-      />
-      <label>Password</label>
-      <input
-        type="password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <button
-        onClick={async () => {
+      {auth ? (
+        <>
+          <h2>You are already logged in.</h2>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h1>Login Page</h1>
+          <label>email</label>
+          <input
+            type="text"
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="none"
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            label="Password"
+            id="password"
+            autoComplete="none"
+          />
 
-          //login in using auth context
-          const loginResult = await auth.login(email, password);
-					console.log("button onclick loginResult: ", loginResult)
-					if (loginResult.success) {
-						navigate("/")
-					}
-          if (!loginResult.success) {
-            setLoginMessage(loginResult.message)
-          }
-        }}
-      >
-        Login
-      </button>
+          <button type="submit">Login</button>
+        </form>
+      )}
     </div>
   );
 };

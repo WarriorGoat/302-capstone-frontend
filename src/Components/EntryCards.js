@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EntryCards.css";
 import axios from "axios";
-import { MichiganLink } from "./LicenseLinks";
+import {MILink} from "./LicenseLinks"
 
 // Blog Card
 const EntryCards = (props) => {
@@ -70,7 +70,7 @@ const EntryCards = (props) => {
                 license?.licenseNum +
                 ", Class: " +
                 license?.licenseClass}
-                 <a href={`${MichiganLink}${license?.licenseNum}`} target = "blank"> Click here to verify</a>
+                 <a href={`${MILink}${license?.licenseNum}`} target = "blank"> Click here to verify</a>
             </li>
             <li className="list-group-item">
               <b>Free Estimates:</b> {entry.freeEstimates? "Yes":"No"}
