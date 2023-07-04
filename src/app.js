@@ -8,6 +8,7 @@ import LoginPage from "./Pages/LoginPage";
 import RegistrationPage from "./Pages/RegistrationPage";
 import BlogsPage from "./Pages/BlogsPage";
 import RedirectPage from "./Pages/RedirectPage";
+import UpdateAcctPage from "./Pages/UpdateAcctPage";
 import "./app.css";
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
         },
         {
           path: "/update-user",
-          element: <RegistrationPage />,
+          element: <UpdateAcctPage />,
         },
         {
           path: "/blogs",

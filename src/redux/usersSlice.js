@@ -1,4 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import { useSelector } from "react-redux";
 import Axios from '../lib/Axios'
 import { authSuccess } from './authSlice'
 
@@ -15,10 +16,24 @@ export const registerUser = createAsyncThunk('user/registerUser', async payloadD
 })
 
 export const updateUser = createAsyncThunk('user/updateUser', async payloadData => {
+
     try{
         // call to the API/backend
-        console.log(payloadData)
-        let response = await Axios.post('/users/update-user/:email', payloadData)
+        console.log("Sending call to Axios")
+        let response = await Axios.patch('/users/update-user/'+(payloadData.email), payloadData)
+        return response.data
+    }catch(error){
+        console.log(error)
+        // return thunkAPI.rejectWithValue(error.response.data)
+    }
+})
+
+export const deleteUser = createAsyncThunk('user/deleteUser', async payloadData => {
+
+    try{
+        // call to the API/backend
+        console.log("Sending call to Axios")
+        let response = await Axios.delete('/users/delete/'+(payloadData.email), payloadData)
         return response.data
     }catch(error){
         console.log(error)
@@ -28,12 +43,8 @@ export const updateUser = createAsyncThunk('user/updateUser', async payloadData 
 
 export const login = createAsyncThunk('user/login', async(userData, thunkAPI) => {
     try {
-        console.log("Activate Frontend Login Request")
-        console.log(userData)
         let response = await Axios.post('/users/login', userData)
-        console.log(response)
         localStorage.setItem('jwtToken', response.data.token)
-        console.log(response.data)
         //dispatch authSuccess with Thunk API
         thunkAPI.dispatch(authSuccess())
         return response.data
@@ -128,6 +139,16 @@ export const usersSlice = createSlice({
                 state.status = 'pending'
             })
             .addCase(login.rejected, (state, action) => {
+                state.message = action.payload
+                state.status = 'rejected'
+            })
+            .addCase(deleteUser.fulfilled, (state)=> {  
+                state.status = 'fulfilled'
+            })
+            .addCase(deleteUser.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
                 state.message = action.payload
                 state.status = 'rejected'
             })
