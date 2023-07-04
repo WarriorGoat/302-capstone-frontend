@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { createBrowserRouter, RouterProvider, Routes, useNavigate} from "react-router-dom";
-import { useSelector } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./redux/store";
 import Layout from "./Layouts/Layout";
 import HomePage from "./Pages/HomePage";
@@ -8,19 +6,12 @@ import EntryFormPage from "./Pages/EntryFormPage";
 import EntryListPage from "./Pages/EntryListPage";
 import LoginPage from "./Pages/LoginPage";
 import RegistrationPage from "./Pages/RegistrationPage";
-import ProtectedRoute from "./Components/ProtectedRoutes";
+import BlogsPage from "./Pages/BlogsPage";
+import RedirectPage from "./Pages/RedirectPage";
 import "./app.css";
 
 function App() {
-  const [userMessage, setUserMessage] = useState("");
-  const auth = store.auth;
-  // const navigate = useNavigate()
-
-  // const ProtectedRoute = ({ children }) => {
-  //   const SendToLogin = navigate('/login')
-  //   {!auth? (<SendToLogin />):( children)}
-  //   ;
-  // };
+  const auth = store.auth; //for future auth restrictions
 
   const router = createBrowserRouter([
     {
@@ -33,34 +24,37 @@ function App() {
         },
         {
           path: "/entry-form",
-          element: 
-          // <ProtectedRoute>
-            <EntryFormPage /> 
-          // </ProtectedRoute>  
+          element: <EntryFormPage />,
         },
         {
-          // index: true,
           path: "/list",
-          element: <EntryListPage 
-          />,
+          element: <EntryListPage />,
         },
         {
           path: "/login",
-          element: <LoginPage 
-          />,
+          element: <LoginPage />,
         },
         {
           path: "/registration",
-          element: <RegistrationPage 
-          />,
+          element: <RegistrationPage />,
+        },
+        {
+          path: "/update-user",
+          element: <RegistrationPage />,
+        },
+        {
+          path: "/blogs",
+          element: <BlogsPage />,
+        },
+        {
+          path: "/redirect",
+          element: <RedirectPage />,
         },
       ],
     },
   ]);
 
-  return (
-      <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

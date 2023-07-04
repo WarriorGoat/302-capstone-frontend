@@ -12,14 +12,14 @@ export const authCheck = createAsyncThunk('auth/authCheck', async(_, thunkAPI) =
   try {
     checkAuthToken()
     let response = await Axios.post('/users/authtoken')
-    console.log("----checkAuthToken Response----")
-    console.log(response)
+    // console.log("----checkAuthToken Response----")
+    // console.log(response)
     thunkAPI.dispatch(setUser(response.data))
     // console.log(response.data)
     return response.data
 
   } catch (error) {
-    console.log("-------authCheck Errored out-------")
+    // console.log("-------authCheck Errored out-------")
     return thunkAPI.rejectWithValue(error.response)
   }
 })
@@ -53,11 +53,12 @@ export const authSlice = createSlice({
           state.isAuth = true
           console.log('!@-------authCheck Fulfilled-------@!')
         })
+        
         .addCase(authCheck.rejected, (state, action) => {
           state.isAuth = false
           console.log('!@-------authCheck Rejeccted-------@!')
-          // console.log(action.payload)
         })
+        
         .addCase(logout.fulfilled, (state) => {
           state.isAuth = false
           console.log('!@------logout Fulfilled-------@!')

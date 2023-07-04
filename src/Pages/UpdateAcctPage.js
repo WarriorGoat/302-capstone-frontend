@@ -30,17 +30,10 @@ const RegistrationPage = (props) => {
       email: data.get("email"),
       password: data.get("password"),
     };
-
-    //verify that both password entries match
-    if (userObj.password !== data.get("password2")) {
-       return console.log("Passwords do not Match");
-    } else {
-        console.log("Passwords Matched");
-    }
-
     dispatch(registerUser(userObj));
-    console.log("Registration form submitted");
+    console.log("Registration form submitted")
   };
+
 
   return (
     <div>
@@ -61,28 +54,15 @@ const RegistrationPage = (props) => {
           </select>
         </div>
         <div>
-          <span>
-            <label htmlFor="firstName">First Name</label>
-            <input id="firstName" type="text" name="firstName" required />
-            <label htmlFor="lastName">Last Name</label>
-            <input id="lastName" type="text" name="lastName" required />
-          </span>
-          <span>
-            <label htmlFor="email">email</label>
-            <input id="email" type="text" name="email" required />
-          </span>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input id="password" type="password" name="password" required />
-            <label htmlFor="password2">Re-enter Password</label>
-            <input
-              id="password2"
-              type="password"
-              name="password2"
-              required
-       
-            />
-          </div>
+          <label htmlFor="firstName">First Name</label>
+          <input id="firstName" type="text" name="firstName" required/>
+          <label htmlFor="lastName">Last Name</label>
+          <input id="lastName" type="text" name="lastName" required/>
+          <br />
+          {/* <label htmlFor="email">email</label>
+          <input id="email" type="text" name="email" required/> */}
+          <label htmlFor="password">Password</label>
+          <input id="password" type="password" name="password" required/>
         </div>
         <button type="submit">Signup</button>
       </form>

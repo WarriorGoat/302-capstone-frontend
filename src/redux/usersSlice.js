@@ -14,6 +14,18 @@ export const registerUser = createAsyncThunk('user/registerUser', async payloadD
     }
 })
 
+export const updateUser = createAsyncThunk('user/updateUser', async payloadData => {
+    try{
+        // call to the API/backend
+        console.log(payloadData)
+        let response = await Axios.post('/users/update-user/:email', payloadData)
+        return response.data
+    }catch(error){
+        console.log(error)
+        // return thunkAPI.rejectWithValue(error.response.data)
+    }
+})
+
 export const login = createAsyncThunk('user/login', async(userData, thunkAPI) => {
     try {
         console.log("Activate Frontend Login Request")
@@ -64,6 +76,13 @@ export const usersSlice = createSlice({
                 message: 'User Logged Out!',
                 status: null
             }
+        },
+        udpateUser: (state, action)=>{
+            console.log(action.payload)
+            return {
+                ...action.payload,
+                password: ''
+            }
         }
     },
     extraReducers: builder => {
@@ -80,6 +99,20 @@ export const usersSlice = createSlice({
                 state.status = 'rejected'
             })
             .addCase(registerUser.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                return {
+                    ...action.payload,
+                    password: '',
+                    status: 'fulfilled'
+                }
+            })
+            .addCase(updateUser.rejected, (state) => {
+                console.log('!@-------updateUser Error!-------@!')
+                state.status = 'rejected'
+            })
+            .addCase(updateUser.pending, (state) => {
                 state.status = 'pending'
             })
             .addCase(login.fulfilled, (state, action)=> {
