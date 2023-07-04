@@ -113,6 +113,7 @@ export const usersSlice = createSlice({
                 state.status = 'pending'
             })
             .addCase(updateUser.fulfilled, (state, action) => {
+                console.log("Account Updated!!")
                 return {
                     ...action.payload,
                     password: '',
@@ -143,6 +144,7 @@ export const usersSlice = createSlice({
                 state.status = 'rejected'
             })
             .addCase(deleteUser.fulfilled, (state)=> {  
+                console.log("Account Deleted!!")
                 state.status = 'fulfilled'
             })
             .addCase(deleteUser.pending, (state) => {

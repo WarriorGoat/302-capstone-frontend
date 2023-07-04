@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { updateUser } from "../redux/usersSlice";
+import { updateUser, deleteUser } from "../redux/usersSlice";
 import { authCheck, logout } from "../redux/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -29,23 +29,28 @@ const UpdateAcctPage = (props) => {
         lastName: data.get("lastName"),
         password: data.get("password"),
     }
-    let newScope=""
+    console.log("___Input")
+    console.log(input)
+
     let newFirstName=""
     let newLastName=""
     let newPassword=""
 
-    input.scope.length===0?(newScope=users.scope):(newScope=data.get("scope"))
+
     input.firstName.length===0?(newFirstName=users.firstName):(newFirstName=data.get("firstName"))
     input.lastName.length===0?(newLastName=users.lastName):(newLastName=data.get("lastName"))
     input.password.length===0?(newPassword=users.password):(newPassword=data.get("password"))
 
     let newUserObj = {
-        scope: newScope,
+        scope: input.scope,
         email: users.email,
         firstName: newFirstName,
         lastName: newLastName,
         password: newPassword,
     };
+
+    console.log("___newUserObj")
+    console.log(newUserObj)
 
        //verify that both password entries match
        if (newUserObj.password !== data.get("password2")) {
@@ -55,12 +60,20 @@ const UpdateAcctPage = (props) => {
      }
     dispatch(updateUser(newUserObj));
     console.log("Account Update submitted")
+    alert("Account Update submitted")
+    navigate("/login")
   };
 
-  const handleDelete = (event) => {
+    const handleDelete = (event) => {
     event.preventDefault();
-
-  }
+    let newUserObj = {
+        email: users.email,
+    }
+    dispatch(deleteUser(newUserObj))
+    dispatch(logout())
+    alert("Account Deleted!!")
+    navigate("/")
+    }
 
   return (
     <div>
@@ -114,9 +127,11 @@ const UpdateAcctPage = (props) => {
         </div>
         <button type="submit">Update</button>
       </form>
-      <form onSubmit={handleDelete}>
-      <button type="submit">Delete Account!!</button>
-      </form>
+      <div>
+        <form onSubmit={handleDelete}>
+            <button type="submit">Delete Account!!</button>
+        </form>
+      </div>
     </div>
   );
 };
