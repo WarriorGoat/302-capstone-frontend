@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EntryCards from "../Components/EntryCards";
-import SearchBar from "../Components/SearchBar"
+import SearchBar from "../Components/SearchBar";
 
 const EntryListPage = (props) => {
   const [entryList, setEntryList] = useState([]);
-  const backendUrl = process.env.REACT_APP_BACKEND
+  const backendUrl = process.env.REACT_APP_BACKEND;
   //load the blog items from the back end
 
   const pullData = async () => {
@@ -22,12 +22,12 @@ const EntryListPage = (props) => {
     pullData();
   }, []);
 
-  // console.log(blogList)
-
   return (
     <div className="EntryListPage container">
       <div className="searchbar">
-        <h2>Search for Contactors by State and/or Work Specialites</h2>
+        <h2>
+          COMING SOON: Search for Contactors by State and/or Work Specialites
+        </h2>
         <SearchBar />
       </div>
       <h2 className="display-4 text-center">Here is your List of Entries</h2>

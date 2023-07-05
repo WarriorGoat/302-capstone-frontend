@@ -14,14 +14,12 @@ const RegistrationPage = (props) => {
 
   useEffect(() => {
     if (status === "fulfilled") {
-      console.log("Registration successful");
       navigate("/login");
     }
   }, [status]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Registration form activated");
     const data = new FormData(event.currentTarget);
     let userObj = {
       scope: data.get("scope"),
@@ -33,13 +31,9 @@ const RegistrationPage = (props) => {
 
     //verify that both password entries match
     if (userObj.password !== data.get("password2")) {
-       return console.log("Passwords do not Match");
-    } else {
-        console.log("Passwords Matched");
+      return alert("Passwords do not Match");
     }
-
     dispatch(registerUser(userObj));
-    console.log("Registration form submitted");
   };
 
   return (
@@ -75,13 +69,7 @@ const RegistrationPage = (props) => {
             <label htmlFor="password">Password</label>
             <input id="password" type="password" name="password" required />
             <label htmlFor="password2">Re-enter Password</label>
-            <input
-              id="password2"
-              type="password"
-              name="password2"
-              required
-       
-            />
+            <input id="password2" type="password" name="password2" required />
           </div>
         </div>
         <button type="submit">Signup</button>

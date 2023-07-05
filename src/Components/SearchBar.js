@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+//TO BE BUILT
 
-const SearchBar = (props) =>{
-  const [query, setQuery] = useState('');
+import React, { useState } from "react";
+
+const SearchBar = (props) => {
+  const [query, setQuery] = useState("");
 
   const handleInputChange = (event) => {
     setQuery(event.target.value);
@@ -18,6 +20,6 @@ const SearchBar = (props) =>{
       <button type="submit">Search</button>
     </form>
   );
-}
+};
 
-export default SearchBar
+export default SearchBar;

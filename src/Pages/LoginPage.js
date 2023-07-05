@@ -23,13 +23,11 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("LogIn form submitted");
     const data = new FormData(event.currentTarget);
     let userObj = {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log(userObj)
     dispatch(login(userObj));
   };
 
@@ -42,7 +40,7 @@ const LoginPage = () => {
       {auth ? (
         <>
           <h2>You are already logged in.</h2>
-          <button onClick={handleLogout}>Logout</button>
+          <button className="button" onClick={handleLogout}>Logout</button>
         </>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -64,7 +62,7 @@ const LoginPage = () => {
             autoComplete="none"
           />
 
-          <button type="submit">Login</button>
+          <button type="submit" className="button" >Login</button>
         </form>
       )}
     </div>

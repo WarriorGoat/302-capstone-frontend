@@ -3,77 +3,73 @@ import { updateUser, deleteUser } from "../redux/usersSlice";
 import { authCheck, logout } from "../redux/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-// import store from "../redux/store";
-// import Select from 'react-dropdown-select';
 
 const UpdateAcctPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.isAuth);
-  const users = useSelector((state) => state.users)
+  const users = useSelector((state) => state.users);
   const scopeTypes = ["user", "contractor", "admin"];
   const [selected, setSelected] = useState(null);
 
-//   useEffect(() => {
-//     if (auth !== true) {
-//       navigate("/login");
-//     }
-//   }, [auth]);
+  //   useEffect(() => {
+  //     if (auth !== true) {
+  //       navigate("/login");
+  //     }
+  //   }, [auth]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let input={
-        scope: data.get("scope"),
-        firstName: data.get("firstName"),
-        lastName: data.get("lastName"),
-        password: data.get("password"),
-    }
-    console.log("___Input")
-    console.log(input)
-
-    let newFirstName=""
-    let newLastName=""
-    let newPassword=""
-
-
-    input.firstName.length===0?(newFirstName=users.firstName):(newFirstName=data.get("firstName"))
-    input.lastName.length===0?(newLastName=users.lastName):(newLastName=data.get("lastName"))
-    input.password.length===0?(newPassword=users.password):(newPassword=data.get("password"))
-
-    let newUserObj = {
-        scope: input.scope,
-        email: users.email,
-        firstName: newFirstName,
-        lastName: newLastName,
-        password: newPassword,
+    let input = {
+      scope: data.get("scope"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      password: data.get("password"),
     };
 
-    console.log("___newUserObj")
-    console.log(newUserObj)
+    let newFirstName = "";
+    let newLastName = "";
+    let newPassword = "";
 
-       //verify that both password entries match
-       if (newUserObj.password !== data.get("password2")) {
-        return console.log("Passwords do not Match");
-     } else {
-         console.log("Passwords Matched");
-     }
+    input.firstName.length === 0
+      ? (newFirstName = users.firstName)
+      : (newFirstName = data.get("firstName"));
+    input.lastName.length === 0
+      ? (newLastName = users.lastName)
+      : (newLastName = data.get("lastName"));
+    input.password.length === 0
+      ? (newPassword = users.password)
+      : (newPassword = data.get("password"));
+
+    let newUserObj = {
+      scope: input.scope,
+      email: users.email,
+      firstName: newFirstName,
+      lastName: newLastName,
+      password: newPassword,
+    };
+
+    //verify that both password entries match
+    if (newUserObj.password !== data.get("password2")) {
+      return alert("Passwords do not Match");
+    }
+
     dispatch(updateUser(newUserObj));
-    console.log("Account Update submitted")
-    alert("Account Update submitted")
-    navigate("/login")
+    alert("Account Update submitted");
+    navigate("/login");
   };
 
-    const handleDelete = (event) => {
+  const handleDelete = (event) => {
     event.preventDefault();
     let newUserObj = {
-        email: users.email,
-    }
-    dispatch(deleteUser(newUserObj))
-    dispatch(logout())
-    alert("Account Deleted!!")
-    navigate("/")
-    }
+      email: users.email,
+    };
+    dispatch(deleteUser(newUserObj));
+    dispatch(logout());
+    alert("Account Deleted!!");
+    navigate("/");
+  };
 
   return (
     <div>
@@ -96,40 +92,32 @@ const UpdateAcctPage = (props) => {
         <div>
           <span>
             <label htmlFor="firstName">First Name</label>
-            <input 
-                id="firstName" 
-                type="text" 
-                name="firstName" 
-                placeholder={users.firstName}
-                />
+            <input
+              id="firstName"
+              type="text"
+              name="firstName"
+              placeholder={users.firstName}
+            />
             <label htmlFor="lastName">Last Name</label>
-            <input 
-                id="lastName" 
-                type="text" 
-                name="lastName" 
-                placeholder={users.lastName}
-                />
+            <input
+              id="lastName"
+              type="text"
+              name="lastName"
+              placeholder={users.lastName}
+            />
           </span>
           <div>
             <label htmlFor="password">Password</label>
-            <input 
-                id="password" 
-                type="password" 
-                name="password" 
-                />
+            <input id="password" type="password" name="password" />
             <label htmlFor="password2">Re-enter Password</label>
-            <input
-              id="password2"
-              type="password"
-              name="password2"
-            />
+            <input id="password2" type="password" name="password2" />
           </div>
         </div>
         <button type="submit">Update</button>
       </form>
       <div>
         <form onSubmit={handleDelete}>
-            <button type="submit">Delete Account!!</button>
+          <button type="submit">Delete Account!!</button>
         </form>
       </div>
     </div>

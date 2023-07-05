@@ -22,7 +22,12 @@ export const AuthProvider = ({ children }) => {
   // call this function when you want to register the user
   const register = async (firstName, lastName, email, password) => {
     setIsAuthLoading(true);
-    const registerResult = await registerUser(firstName, lastName, email, password);
+    const registerResult = await registerUser(
+      firstName,
+      lastName,
+      email,
+      password
+    );
     setIsAuthLoading(false);
     return registerResult;
   };
@@ -35,7 +40,6 @@ export const AuthProvider = ({ children }) => {
     if (loginResult.success) {
       //update browser session details
       setLSUserData(loginResult.token, loginResult.email);
-      
     }
     setIsAuthLoading(false);
     return loginResult;
@@ -115,7 +119,7 @@ const setLSUserData = (token, email) => {
     process.env.REACT_APP_TOKEN_HEADER_KEY,
     JSON.stringify({ token, email })
   );
-  return true
+  return true;
 };
 
 const removeLSUserData = () => {

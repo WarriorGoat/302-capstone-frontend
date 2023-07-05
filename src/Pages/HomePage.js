@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { authCheck, logout } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
+
 //home page component
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -26,10 +27,10 @@ const HomePage = () => {
         </>
       ) : (
         <>
-          <button type="button" onClick={() => navigate("/login")}>
+          <button className="button" type="button" onClick={() => navigate("/login")}>
             Login
           </button>
-          <button type="button" onClick={() => navigate("/registration")}>
+          <button className="button" type="button" onClick={() => navigate("/registration")}>
             {" "}
             Register
           </button>

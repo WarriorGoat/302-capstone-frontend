@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EntryCards.css";
 import axios from "axios";
-import {MILink} from "./LicenseLinks"
+import { MILink } from "./LicenseLinks";
 
 // Blog Card
 const EntryCards = (props) => {
   const [entryList, setEntryList] = useState(props);
 
   const navigate = useNavigate();
-  // const MichiganLink = MichiganLink();
 
   const DeleteCard = (props) => {
     axios
@@ -36,8 +35,7 @@ const EntryCards = (props) => {
     return (
       <div className="card col" key={entry.id}>
         <div className="card-header">
-          <h2 className="card-title">Company: {entry.company}
-          </h2>
+          <h2 className="card-title">Company: {entry.company}</h2>
         </div>
         <div className="card-body">
           <ul className="list-group list-group-flush">
@@ -70,10 +68,13 @@ const EntryCards = (props) => {
                 license?.licenseNum +
                 ", Class: " +
                 license?.licenseClass}
-                 <a href={`${MILink}${license?.licenseNum}`} target = "blank"> Click here to verify</a>
+              <a href={`${MILink}${license?.licenseNum}`} target="blank">
+                {" "}
+                Click here to verify
+              </a>
             </li>
             <li className="list-group-item">
-              <b>Free Estimates:</b> {entry.freeEstimates? "Yes":"No"}
+              <b>Free Estimates:</b> {entry.freeEstimates ? "Yes" : "No"}
             </li>
             <li className="list-group-item">
               <b>Work Specialites:</b>{" "}

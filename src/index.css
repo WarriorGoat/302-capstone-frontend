@@ -7,14 +7,19 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+   
   }
   div{
     margin: 10px;
     padding: 10px;
-    
     color: rgb(248, 245, 222);
     text-align: center;
     text-shadow: 1px 1px 1px rgb(7, 4, 1);;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 .layout{
   background-color: rgba(97, 78, 41, 0.6);

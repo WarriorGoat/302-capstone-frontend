@@ -1,33 +1,33 @@
 .nav-bar {
-    background-color: #465472;
-    display: flex;
-    /* flex-direction: row; */
-    justify-content: left;
-    font-size: calc(10px + 2vmin);
-    border: 10px solid #778296
-  }
-  
-  h2{
-    color: white;
-    margin: 10px;
-  }
-  
-  a:link {
-    color: white;
-    margin: 10px;
-  }
-  
-  a:visited {
-    color: #61dafb;
-    margin: 10px;
-  }
-  
-  a:hover {
-    color: coral;
-    margin: 10px;
-  }
-  
-  a:active {
-    color: red;
-    margin: 10px;
-  }
+  background-color: #465472;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  font-size: calc(10px + 2vmin);
+  border: 10px solid #778296;
+}
+
+h2 {
+  color: white;
+  margin: 10px;
+}
+
+a:link {
+  color: white;
+  margin: 10px;
+}
+
+a:visited {
+  color: #61dafb;
+  margin: 10px;
+}
+
+a:hover {
+  color: coral;
+  margin: 10px;
+}
+
+a:active {
+  color: red;
+  margin: 10px;
+}
